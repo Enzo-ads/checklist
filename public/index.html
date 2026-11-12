@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fichário Pokémon</title>
+<link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500;700;900&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--page:#e9ecf5;--sleeve:#f8f9fd;--ink:#22264b;--mute:#6b7094;--line:#d3d8ea;--ghost:#c6cbe0;--acc:#4b5cc4;--acc2:#4b5cc4;
+--d:'Gabarito','Trebuchet MS',system-ui,sans-serif;--b:'Hanken Grotesk',system-ui,sans-serif}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--page);color:var(--ink);font:400 15px/1.45 var(--b);display:grid;grid-template-columns:290px 1fr;min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer}:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+aside{background:var(--ink);color:#e8eaf8;padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+aside h1{font:900 24px var(--d);margin:0 0 14px;letter-spacing:-.3px}
+.search{position:relative}.search input{width:100%;padding:10px 12px;border-radius:10px;border:0;font:inherit;background:#fff;color:var(--ink)}
+.drop{position:absolute;left:0;right:0;top:44px;background:#fff;color:var(--ink);border-radius:10px;box-shadow:0 12px 30px #0004;z-index:5;max-height:60vh;overflow:auto}
+.drop button{display:flex;gap:10px;align-items:center;width:100%;border:0;background:none;padding:6px 10px;text-align:left}.drop button:hover,.drop button:focus-visible{background:#eef0fa}
+.drop img,.mine img{width:36px;height:36px;object-fit:contain}.hint{font-size:12.5px;color:#aab0d8;margin:8px 2px 14px}
+.mine{display:flex;gap:10px;align-items:center;width:100%;border:0;background:none;border-radius:10px;padding:7px 8px;text-align:left;color:inherit}
+.mine[aria-current=true]{background:#ffffff22}.mine:hover{background:#ffffff14}.mine b{font-weight:700;display:block}.mine small{color:#aab0d8}
+.bar{height:5px;border-radius:3px;background:#ffffff2a;margin-top:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--c,#8fa0ff)}
+main{padding:26px 30px 80px;min-width:0}
+.empty{max-width:420px;margin:15vh auto;text-align:center;color:var(--mute)}.empty h2{font:900 28px var(--d);color:var(--ink);margin:0 0 6px}
+.top{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:16px 18px;border-radius:18px;background:var(--sleeve);border:1px solid var(--line)}
+.top img{width:84px;height:84px;object-fit:contain}.top h2{font:900 34px/1 var(--d);margin:0}.top .n{color:var(--mute)}
+.top .prog{flex:1;min-width:220px}.big{font:700 22px var(--d)}.pb{height:10px;border-radius:6px;background:var(--line);overflow:hidden;margin-top:6px}.pb i{display:block;height:100%;background:var(--acc2);transition:width .25s}
+.top.done{border-color:transparent;background:linear-gradient(115deg,#fff 0,#ffe3f3 18%,#e0f0ff 38%,#e6ffe9 58%,#fff4cf 78%,#fff 100%);box-shadow:0 0 0 2px #fff,0 0 0 4px #b9a7ff}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 4px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--sleeve);padding:6px 13px;border-radius:99px}.chip[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sp{flex:1}.link{border:0;background:none;text-decoration:underline;color:var(--mute);padding:6px}
+.setH{display:flex;gap:10px;align-items:baseline;margin:28px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.setH h3{font:700 19px var(--d);margin:0}.setH span{color:var(--mute);font-size:13.5px}.setH em{margin-left:auto;font:700 15px var(--d);font-style:normal}.setH em.ok{color:#14855a}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:12px}
+.sl{border:1px solid var(--line);background:var(--sleeve);border-radius:10px;padding:7px 7px 6px;text-align:left;content-visibility:auto;contain-intrinsic-size:220px}
+.sl .im{aspect-ratio:5/7;border-radius:6px;background:#dfe3f2;display:grid;place-items:center;overflow:hidden;position:relative;font-size:12px;color:var(--mute);text-align:center}
+.sl img{width:100%;height:100%;object-fit:cover;transition:filter .2s,opacity .2s}
+.sl[aria-pressed=false] img{filter:grayscale(1) contrast(.8);opacity:.3}
+.sl[aria-pressed=true]{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
+.sl[aria-pressed=true] .im::after{content:"✓";position:absolute;right:5px;top:5px;width:22px;height:22px;border-radius:50%;background:var(--acc);color:#fff;font:700 14px/22px var(--b);text-align:center}
+.sl b{display:block;font-size:13px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sl small{color:var(--mute);font-size:12px}
+@media(max-width:800px){body{display:block}aside{position:static;height:auto;max-height:42vh}main{padding:18px 14px 60px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<aside><h1>Fichário</h1>
+<div class="search"><input id="q" placeholder="Buscar Pokémon (nome ou nº)" autocomplete="off" aria-label="Buscar Pokémon"><div class="drop" id="drop" hidden></div></div>
+<p class="hint">Enter adiciona o primeiro resultado. Separe por vírgula para adicionar vários: pikachu, 6, eevee.</p>
+<nav id="mine" aria-label="Pokémon escolhidos"></nav></aside>
+<main id="main"></main>
+<script>
+const $=s=>document.querySelector(s),E=(t,p={},...k)=>{const e=Object.assign(document.createElement(t),p);e.append(...k);return e};
+const api=(u,m='GET',b)=>fetch('/api'+u,{method:m,headers:{'Content-Type':'application/json'},body:b&&JSON.stringify(b)}).then(r=>r.json());
+const TYPE={fire:'#e8583a',water:'#3b82d6',grass:'#4da35a',electric:'#e2b21a',psychic:'#c35a9a',ice:'#52b9c9',fighting:'#c0502f',poison:'#9a5ac0',ground:'#b98a4a',flying:'#7b8fd8',bug:'#8aa51e',rock:'#a89a64',ghost:'#6b5aa8',dragon:'#4b5cc4',dark:'#5a4a52',steel:'#7c91a0',fairy:'#e07ab0',normal:'#8c8f9e'};
+const col=p=>TYPE[(p.types||'').split(',')[0]]||'#4b5cc4';
+let mine=[],cur=null,cards=[],F={own:'all',reg:'all'};
+const fmt=n=>n.toLocaleString('pt-BR');
+async function loadMine(){mine=await api('/pokemon?sel=1');renderMine();if(cur){cur=mine.find(p=>p.id===cur.id)||null}if(!cur&&mine[0])return open(mine[0].id);renderMain()}
+function renderMine(){const n=$('#mine');n.replaceChildren(...mine.map(p=>{const b=E('button',{className:'mine'},E('img',{src:p.sprite,alt:'',loading:'lazy'}),E('span',{style:'flex:1;min-width:0'},E('b',{},p.name),E('small',{},`${p.have}/${p.total} cartas`),E('div',{className:'bar'},E('i',{style:`width:${p.total?100*p.have/p.total:0}%;--c:${col(p)}`}))));b.setAttribute('aria-current',cur&&cur.id===p.id);b.onclick=()=>open(p.id);return b}))}
+async function open(id){cur=mine.find(p=>p.id===id);cards=await api(`/pokemon/${id}/cards`);renderMine();renderMain()}
+function stat(){const h=cards.filter(c=>c.own).length;if(cur){cur.have=h;cur.total=cards.length}return h}
+function renderMain(){const m=$('#main');
+ if(!cur){m.replaceChildren(E('div',{className:'empty'},E('h2',{},'Nenhum Pokémon escolhido'),'Busque um Pokémon na barra lateral para listar todas as cartas dele. Toque em uma carta para marcar que você a tem.'));return}
+ const h=stat(),t=cards.length,done=t>0&&h===t,c=col(cur);document.documentElement.style.setProperty('--acc2',c);
+ const top=E('div',{className:'top'+(done?' done':'')},E('img',{src:cur.sprite,alt:''}),E('div',{},E('h2',{},cur.name),E('div',{className:'n'},'Nº '+String(cur.id).padStart(4,'0'))),
+  E('div',{className:'prog'},E('div',{className:'big'},`${h} de ${fmt(t)} cartas`+(done?' · completo':'')),E('div',{className:'pb'},E('i',{style:`width:${t?100*h/t:0}%`}))));
+ const chip=(k,v,l)=>{const b=E('button',{className:'chip',textContent:l});b.setAttribute('aria-pressed',F[k]===v);b.onclick=()=>{F[k]=v;renderMain()};return b};
+ const rm=E('button',{className:'link',textContent:'Remover Pokémon'});rm.onclick=async()=>{await api('/selected/'+cur.id,'DELETE');cur=null;loadMine()};
+ const all=E('button',{className:'link',textContent:'Marcar visíveis'});all.onclick=()=>bulk(vis(),true);
+ const none=E('button',{className:'link',textContent:'Limpar visíveis'});none.onclick=()=>bulk(vis(),false);
+ const tools=E('div',{className:'tools'},chip('own','all','Todas'),chip('own','have','Tenho'),chip('own','miss','Faltam'),E('span',{style:'width:12px'}),chip('reg','all','Todos os países'),chip('reg','w','Internacionais'),chip('reg','a','Ásia'),E('span',{className:'sp'}),all,none,rm);
+ const groups=new Map();vis().forEach(x=>{(groups.get(x.set_name+x.region+x.release_date)||groups.set(x.set_name+x.region+x.release_date,[]).get(x.set_name+x.region+x.release_date)).push(x)});
+ const body=[...groups.values()].map(g=>{const f=g[0],all_=cards.filter(x=>x.set_name===f.set_name&&x.region===f.region&&x.release_date===f.release_date),o=all_.filter(x=>x.own).length;
+  return E('section',{},E('div',{className:'setH'},E('h3',{},f.set_name),E('span',{},`${f.serie_name}${f.region==='a'?' (Ásia)':''} · ${f.release_date.slice(0,4)||'s/d'}`),E('em',{className:o===all_.length?'ok':''},`${o}/${all_.length}`)),
+   E('div',{className:'grid'},...g.map(card)))});
+ m.replaceChildren(top,tools,...(body.length?body:[E('p',{className:'hint',style:'color:var(--mute)'},t?'Nenhuma carta com esses filtros.':'Nenhuma carta encontrada para este Pokémon.')]))}
+const vis=()=>cards.filter(c=>(F.own==='all'||(F.own==='have')===!!c.own)&&(F.reg==='all'||c.region===F.reg));
+function card(c){const img=E('img',{src:c.img+'/low.webp',alt:'',loading:'lazy'});img.onerror=()=>{if(!img.dataset.t){img.dataset.t=1;img.src=c.img+'/high.png'}else img.replaceWith(E('span',{},c.name))};
+ const b=E('button',{className:'sl',title:[c.name,c.rarity,c.illustrator].filter(Boolean).join(' · ')},E('div',{className:'im'},img),E('b',{},c.name),E('small',{},`${c.local_id}${c.total?'/'+c.total:''}${c.rarity?' · '+c.rarity:''}`));
+ b.setAttribute('aria-pressed',!!c.own);b.onclick=()=>{c.own=c.own?0:1;api('/owned','POST',{ids:[c.id],owned:!!c.own});renderMain();renderMine()};return b}
+async function bulk(list,owned){list.forEach(c=>c.own=owned?1:0);renderMain();renderMine();await api('/owned','POST',{ids:list.map(c=>c.id),owned})}
+async function add(id){await api('/selected','POST',{id});cur={id};await loadMine();open(id)}
+let tm;$('#q').oninput=e=>{clearTimeout(tm);const v=e.target.value.trim();if(!v||v.includes(',')){$('#drop').hidden=true;return}
+ tm=setTimeout(async()=>{const r=await api('/pokemon?q='+encodeURIComponent(v)),d=$('#drop');d.hidden=false;
+  d.replaceChildren(...(r.length?r.map(p=>{const b=E('button',{},E('img',{src:p.sprite,alt:'',loading:'lazy'}),E('span',{},E('b',{},p.name),` #${p.id} · ${fmt(p.total)} cartas`+(p.sel?' · já na lista':'')));b.onclick=()=>{add(p.id);$('#q').value='';d.hidden=true};return b}):[E('div',{style:'padding:10px'},'Nada encontrado')]))},180)};
+$('#q').onkeydown=async e=>{if(e.key!=='Enter')return;let last;for(const t of e.target.value.split(',').map(s=>s.trim()).filter(Boolean)){const r=await api('/pokemon?q='+encodeURIComponent(t));if(r[0]){await api('/selected','POST',{id:r[0].id});last=r[0].id}}
+ e.target.value='';$('#drop').hidden=true;if(last){await loadMine();open(last)}};
+document.onclick=e=>{if(!e.target.closest('.search'))$('#drop').hidden=true};
+loadMine();
+</script></body></html>
